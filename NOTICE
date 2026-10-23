@@ -1,0 +1,15 @@
+Gladys Alpha ESS integration
+Copyright 2026 William Deren
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+It reads, and when the user allows it changes, the data of the Alpha ESS
+systems of the user through the official Alpha ESS Open API
+(https://open.alphaess.com), with the AppID and AppSecret of the user's own
+developer account. This integration is not affiliated with nor endorsed by
+Alpha ESS. The endpoints, fields, units and return codes follow the portal
+documentation as transcribed and checked against the live API by the
+"alphaess-openAPI" library (https://github.com/CharlesGillanders/alphaess-openAPI,
+MIT License); its scope follows the Home Assistant "Alpha ESS" integration
+(https://github.com/CharlesGillanders/homeassistant-alphaESS). No code is
+taken from either.

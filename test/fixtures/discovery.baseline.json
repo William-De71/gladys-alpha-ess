@@ -1,0 +1,739 @@
+{
+  "devices": {
+    "hybrid": {
+      "external_id": "ext:test-integration:system:AL7011023030601",
+      "should_poll": false,
+      "params": ["ALPHA_ESS_SYS_SN"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:pv_power",
+          "category": "energy-production-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:battery_level",
+          "category": "battery-storage",
+          "type": "battery-level",
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:battery_charge_power",
+          "category": "battery-storage",
+          "type": "charge-power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:battery_discharge_power",
+          "category": "battery-storage",
+          "type": "discharge-power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:grid_power",
+          "category": "grid-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": -100000,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:load_power",
+          "category": "energy-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:pv_today",
+          "category": "energy-production-sensor",
+          "type": "daily-production",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:load_today",
+          "category": "energy-sensor",
+          "type": "index-today",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:pv_index",
+          "category": "energy-production-sensor",
+          "type": "index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:grid_import_index",
+          "category": "grid-sensor",
+          "type": "input-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:grid_export_index",
+          "category": "grid-sensor",
+          "type": "output-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:battery_charge_index",
+          "category": "battery-storage",
+          "type": "charge-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030601:battery_discharge_index",
+          "category": "battery-storage",
+          "type": "discharge-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    "without_battery": {
+      "external_id": "ext:test-integration:system:AL7011023030602",
+      "should_poll": false,
+      "params": ["ALPHA_ESS_SYS_SN"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:pv_power",
+          "category": "energy-production-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:grid_power",
+          "category": "grid-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": -100000,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:load_power",
+          "category": "energy-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:pv_today",
+          "category": "energy-production-sensor",
+          "type": "daily-production",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:load_today",
+          "category": "energy-sensor",
+          "type": "index-today",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 1000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:pv_index",
+          "category": "energy-production-sensor",
+          "type": "index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:grid_import_index",
+          "category": "grid-sensor",
+          "type": "input-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:system:AL7011023030602:grid_export_index",
+          "category": "grid-sensor",
+          "type": "output-index",
+          "unit": "kilowatt-hour",
+          "min": 0,
+          "max": 100000000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    },
+    "ev_charger": {
+      "external_id": "ext:test-integration:evcharger:EVCT110000001",
+      "should_poll": false,
+      "params": ["ALPHA_ESS_EVCHARGER_SN", "ALPHA_ESS_SYS_SN"],
+      "features": [
+        {
+          "external_id": "ext:test-integration:evcharger:EVCT110000001:connector_status",
+          "category": "charging-station",
+          "type": "connector-status",
+          "min": 0,
+          "max": 4,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:evcharger:EVCT110000001:charging_state",
+          "category": "charging-station",
+          "type": "charging-state",
+          "min": 0,
+          "max": 5,
+          "read_only": true,
+          "has_feedback": false
+        },
+        {
+          "external_id": "ext:test-integration:evcharger:EVCT110000001:power",
+          "category": "energy-sensor",
+          "type": "power",
+          "unit": "watt",
+          "min": 0,
+          "max": 100000,
+          "read_only": true,
+          "has_feedback": false
+        }
+      ]
+    }
+  },
+  "manifest": {
+    "config_schema": [
+      {
+        "key": "intro",
+        "type": "section"
+      },
+      {
+        "key": "app_id",
+        "type": "string"
+      },
+      {
+        "key": "app_secret",
+        "type": "secret"
+      },
+      {
+        "key": "binding",
+        "type": "section"
+      },
+      {
+        "key": "control",
+        "type": "section"
+      },
+      {
+        "key": "allow_control",
+        "type": "boolean"
+      },
+      {
+        "key": "poll_interval",
+        "type": "select"
+      },
+      {
+        "key": "language",
+        "type": "select"
+      }
+    ],
+    "actions": ["test_connection", "request_bind_code", "bind_system", "diagnostic"],
+    "action_fields": {
+      "test_connection": [],
+      "request_bind_code": ["sys_sn", "check_code"],
+      "bind_system": ["sys_sn", "code"],
+      "diagnostic": []
+    },
+    "widgets": [
+      {
+        "key": "live",
+        "settings": ["system"],
+        "options": {}
+      },
+      {
+        "key": "today",
+        "settings": ["system"],
+        "options": {}
+      },
+      {
+        "key": "schedule",
+        "settings": ["system"],
+        "options": {}
+      }
+    ],
+    "scene_triggers": [
+      {
+        "key": "battery_full",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "battery_level",
+            "type": "number"
+          },
+          {
+            "key": "pv_power_w",
+            "type": "number"
+          },
+          {
+            "key": "grid_power_w",
+            "type": "number"
+          },
+          {
+            "key": "load_power_w",
+            "type": "number"
+          },
+          {
+            "key": "battery_power_w",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "battery_low",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "battery_level",
+            "type": "number"
+          },
+          {
+            "key": "pv_power_w",
+            "type": "number"
+          },
+          {
+            "key": "grid_power_w",
+            "type": "number"
+          },
+          {
+            "key": "load_power_w",
+            "type": "number"
+          },
+          {
+            "key": "battery_power_w",
+            "type": "number"
+          },
+          {
+            "key": "cutoff_soc",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "grid_export_started",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "battery_level",
+            "type": "number"
+          },
+          {
+            "key": "pv_power_w",
+            "type": "number"
+          },
+          {
+            "key": "grid_power_w",
+            "type": "number"
+          },
+          {
+            "key": "load_power_w",
+            "type": "number"
+          },
+          {
+            "key": "battery_power_w",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "grid_import_started",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "battery_level",
+            "type": "number"
+          },
+          {
+            "key": "pv_power_w",
+            "type": "number"
+          },
+          {
+            "key": "grid_power_w",
+            "type": "number"
+          },
+          {
+            "key": "load_power_w",
+            "type": "number"
+          },
+          {
+            "key": "battery_power_w",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "system_offline",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "minutes_offline",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "system_online",
+        "fields": [
+          {
+            "key": "system",
+            "options": []
+          }
+        ],
+        "variables": [
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "minutes_offline",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "ev_charger_status",
+        "fields": [
+          {
+            "key": "charger",
+            "options": []
+          },
+          {
+            "key": "status",
+            "options": [
+              "available",
+              "preparing",
+              "charging",
+              "suspended_evse",
+              "suspended_ev",
+              "finishing",
+              "faulted"
+            ]
+          }
+        ],
+        "variables": [
+          {
+            "key": "charger",
+            "type": "string"
+          },
+          {
+            "key": "charger_sn",
+            "type": "string"
+          },
+          {
+            "key": "status",
+            "type": "string"
+          },
+          {
+            "key": "previous_status",
+            "type": "string"
+          },
+          {
+            "key": "system",
+            "type": "string"
+          },
+          {
+            "key": "system_name",
+            "type": "string"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "access_refused",
+        "fields": [
+          {
+            "key": "reason",
+            "options": ["auth", "clock", "whitelist", "not_bound"]
+          }
+        ],
+        "variables": [
+          {
+            "key": "reason",
+            "type": "string"
+          },
+          {
+            "key": "code",
+            "type": "number"
+          },
+          {
+            "key": "sn",
+            "type": "string"
+          },
+          {
+            "key": "message",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "scene_actions": [
+      {
+        "key": "set_grid_charge",
+        "fields": ["system", "enabled", "period_1", "period_2", "max_soc"],
+        "outputs": [
+          {
+            "key": "result",
+            "type": "string"
+          },
+          {
+            "key": "enabled",
+            "type": "boolean"
+          },
+          {
+            "key": "period_1",
+            "type": "string"
+          },
+          {
+            "key": "period_2",
+            "type": "string"
+          },
+          {
+            "key": "max_soc",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "set_discharge",
+        "fields": ["system", "enabled", "period_1", "period_2", "cutoff_soc"],
+        "outputs": [
+          {
+            "key": "result",
+            "type": "string"
+          },
+          {
+            "key": "enabled",
+            "type": "boolean"
+          },
+          {
+            "key": "period_1",
+            "type": "string"
+          },
+          {
+            "key": "period_2",
+            "type": "string"
+          },
+          {
+            "key": "cutoff_soc",
+            "type": "number"
+          }
+        ]
+      },
+      {
+        "key": "ev_charger_control",
+        "fields": ["charger", "command"],
+        "outputs": [
+          {
+            "key": "result",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "key": "get_today",
+        "fields": ["system"],
+        "outputs": [
+          {
+            "key": "pv_kwh",
+            "type": "number"
+          },
+          {
+            "key": "load_kwh",
+            "type": "number"
+          },
+          {
+            "key": "import_kwh",
+            "type": "number"
+          },
+          {
+            "key": "export_kwh",
+            "type": "number"
+          },
+          {
+            "key": "charge_kwh",
+            "type": "number"
+          },
+          {
+            "key": "discharge_kwh",
+            "type": "number"
+          },
+          {
+            "key": "self_sufficiency",
+            "type": "number"
+          },
+          {
+            "key": "battery_level",
+            "type": "number"
+          },
+          {
+            "key": "summary",
+            "type": "string"
+          }
+        ]
+      }
+    ]
+  }
+}

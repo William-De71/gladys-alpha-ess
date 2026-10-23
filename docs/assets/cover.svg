@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="534" viewBox="0 0 800 534">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#173b4f"/>
+      <stop offset="1" stop-color="#2f7a8c"/>
+    </linearGradient>
+    <linearGradient id="cell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#27466f"/>
+      <stop offset="1" stop-color="#10233f"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="534" fill="url(#sky)"/>
+  <!-- the sun -->
+  <g transform="translate(660 90)">
+    <circle r="40" fill="#ffc83d"/>
+    <g stroke="#ffc83d" stroke-width="8" stroke-linecap="round">
+      <line x1="0" y1="-55" x2="0" y2="-75"/><line x1="0" y1="55" x2="0" y2="75"/>
+      <line x1="-55" y1="0" x2="-75" y2="0"/><line x1="55" y1="0" x2="75" y2="0"/>
+      <line x1="39" y1="39" x2="53" y2="53"/><line x1="-39" y1="-39" x2="-53" y2="-53"/>
+      <line x1="39" y1="-39" x2="53" y2="-53"/><line x1="-39" y1="39" x2="-53" y2="53"/>
+    </g>
+  </g>
+  <!-- the house with its panels -->
+  <g transform="translate(70 250)">
+    <polygon points="0,110 140,10 280,110" fill="#d9e2ec"/>
+    <g transform="translate(150 28) skewY(35)" fill="url(#cell)">
+      <rect x="0" y="0" width="34" height="26"/><rect x="38" y="0" width="34" height="26"/>
+      <rect x="76" y="0" width="34" height="26"/>
+    </g>
+    <rect x="25" y="110" width="230" height="150" fill="#eef3f8"/>
+    <rect x="60" y="150" width="50" height="45" fill="#9ec5e8"/>
+    <rect x="170" y="170" width="50" height="90" fill="#7d8ea0"/>
+  </g>
+  <!-- the battery -->
+  <g transform="translate(410 300)">
+    <rect x="0" y="0" width="120" height="200" rx="14" fill="#eef3f8"/>
+    <rect x="35" y="-14" width="50" height="16" rx="4" fill="#eef3f8"/>
+    <rect x="14" y="62" width="92" height="124" rx="6" fill="#3ec27a"/>
+    <path d="M66 82 L46 128 H62 L54 168 L80 116 H64 Z" fill="#ffffff"/>
+  </g>
+  <!-- the grid -->
+  <g transform="translate(640 250)" stroke="#d9e2ec" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 250 L70 20 L100 250"/>
+    <path d="M28 60 H112 M38 120 H102"/>
+    <path d="M52 170 L88 120 M88 170 L52 120"/>
+  </g>
+  <!-- the flows -->
+  <g stroke="#ffc83d" stroke-width="6" fill="none" stroke-dasharray="14 10" stroke-linecap="round">
+    <path d="M610 140 C560 180 470 200 400 280"/>
+  </g>
+  <g stroke="#7ee08a" stroke-width="6" fill="none" stroke-dasharray="14 10" stroke-linecap="round">
+    <path d="M540 400 H630"/>
+    <path d="M400 420 H360"/>
+  </g>
+  <g font-family="DejaVu Sans, Arial, sans-serif" fill="#ffffff">
+    <text x="40" y="92" font-size="64" font-weight="bold">Alpha ESS</text>
+    <text x="42" y="140" font-size="28">for Gladys Assistant</text>
+    <text x="42" y="180" font-size="20" fill="#d6ecf2">solar · battery · grid · scenes · widgets</text>
+  </g>
+</svg>

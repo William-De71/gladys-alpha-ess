@@ -1,0 +1,2036 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "Alpha ESS",
+  "description": {
+    "en": "Alpha ESS inverters and batteries: solar, battery, grid, energy and scene control.",
+    "fr": "Onduleurs et batteries Alpha ESS : solaire, batterie, réseau, énergie et scènes.",
+    "de": "Alpha-ESS-Wechselrichter und Batterien: Solar, Batterie, Netz, Energie und Szenen.",
+    "es": "Inversores y baterías Alpha ESS: solar, batería, red, energía y escenas."
+  },
+  "version": "0.1.0",
+  "docker_image": "ghcr.io/william-de71/gladys-alpha-ess:0.1.0",
+  "gladys_version": ">=5.1.0",
+  "categories": ["energy"],
+  "cover_image": "https://raw.githubusercontent.com/William-De71/gladys-alpha-ess/main/cover.jpg",
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": {
+        "en": "Alpha ESS Open API",
+        "fr": "Open API d’Alpha ESS",
+        "de": "Alpha ESS Open API",
+        "es": "Open API de Alpha ESS"
+      },
+      "description": {
+        "en": "Create a free developer account on open.alphaess.com. Under Development Management → Developer Information, copy the Developer ID (AppID) and the Developer Secret (AppSecret). The data travel to the Alpha ESS cloud. This integration is not affiliated with Alpha ESS.",
+        "fr": "Créez un compte développeur gratuit sur open.alphaess.com. Dans Development Management → Developer Information, copiez le Developer ID (AppID) et le Developer Secret (AppSecret). Les données passent par le cloud d’Alpha ESS. Cette intégration n’est pas affiliée à Alpha ESS.",
+        "de": "Lege ein kostenloses Entwicklerkonto auf open.alphaess.com an. Unter Development Management → Developer Information kopierst du die Developer ID (AppID) und das Developer Secret (AppSecret). Die Daten laufen über die Alpha-ESS-Cloud. Diese Integration ist nicht mit Alpha ESS verbunden.",
+        "es": "Cree una cuenta de desarrollador gratuita en open.alphaess.com. En Development Management → Developer Information, copie el Developer ID (AppID) y el Developer Secret (AppSecret). Los datos pasan por la nube de Alpha ESS. Esta integración no está afiliada a Alpha ESS."
+      },
+      "links": [
+        {
+          "url": "https://open.alphaess.com",
+          "label": {
+            "en": "Alpha ESS developer portal",
+            "fr": "Portail développeur Alpha ESS",
+            "de": "Alpha-ESS-Entwicklerportal",
+            "es": "Portal de desarrolladores de Alpha ESS"
+          }
+        }
+      ]
+    },
+    {
+      "key": "app_id",
+      "type": "string",
+      "required": true,
+      "label": {
+        "en": "AppID (Developer ID)",
+        "fr": "AppID (Developer ID)",
+        "de": "AppID (Developer ID)",
+        "es": "AppID (Developer ID)"
+      },
+      "placeholder": {
+        "en": "alpha…",
+        "fr": "alpha…",
+        "de": "alpha…",
+        "es": "alpha…"
+      }
+    },
+    {
+      "key": "app_secret",
+      "type": "secret",
+      "required": true,
+      "label": {
+        "en": "AppSecret (Developer Secret)",
+        "fr": "AppSecret (Developer Secret)",
+        "de": "AppSecret (Developer Secret)",
+        "es": "AppSecret (Developer Secret)"
+      },
+      "placeholder": {
+        "en": "The Developer Secret of the portal",
+        "fr": "Le Developer Secret du portail",
+        "de": "Das Developer Secret des Portals",
+        "es": "El Developer Secret del portal"
+      }
+    },
+    {
+      "key": "binding",
+      "type": "section",
+      "label": {
+        "en": "Bind your system to the AppID",
+        "fr": "Lier votre système à l’AppID",
+        "de": "Dein System mit der AppID verknüpfen",
+        "es": "Vincular su sistema al AppID"
+      },
+      "description": {
+        "en": "Only the systems bound to the AppID are seen. On the portal, add the system with its serial number (SN) and its CheckCode, both on the label of the inverter (or given by the installer). If the portal never sends the e-mail, use the buttons below: \"Request a binding code\" e-mails a code to the owner of the system, \"Bind the system\" uses it.",
+        "fr": "Seuls les systèmes liés à l’AppID sont visibles. Sur le portail, ajoutez le système avec son numéro de série (SN) et son CheckCode, tous deux sur l’étiquette de l’onduleur (ou donnés par l’installateur). Si le portail n’envoie jamais l’e-mail, utilisez les boutons ci-dessous : « Demander un code de liaison » envoie un code par e-mail au propriétaire du système, « Lier le système » l’utilise.",
+        "de": "Nur die mit der AppID verknüpften Systeme sind sichtbar. Füge das System im Portal mit seiner Seriennummer (SN) und seinem CheckCode hinzu, beide auf dem Etikett des Wechselrichters (oder vom Installateur). Wenn das Portal nie die E-Mail schickt, nutze die Schaltflächen unten: „Verknüpfungscode anfordern“ schickt dem Besitzer des Systems einen Code per E-Mail, „System verknüpfen“ verwendet ihn.",
+        "es": "Solo se ven los sistemas vinculados al AppID. En el portal, añada el sistema con su número de serie (SN) y su CheckCode, ambos en la etiqueta del inversor (o facilitados por el instalador). Si el portal nunca envía el correo, use los botones de abajo: «Solicitar un código de vinculación» envía un código por correo al propietario del sistema, «Vincular el sistema» lo usa."
+      },
+      "links": [
+        {
+          "url": "https://github.com/CharlesGillanders/alphaess-openAPI/blob/main/docs/API.md#system-binding",
+          "label": {
+            "en": "How the binding works",
+            "fr": "Fonctionnement de la liaison",
+            "de": "So funktioniert die Verknüpfung",
+            "es": "Cómo funciona la vinculación"
+          }
+        }
+      ]
+    },
+    {
+      "key": "control",
+      "type": "section",
+      "label": {
+        "en": "Control of the inverter",
+        "fr": "Pilotage de l’onduleur",
+        "de": "Steuerung des Wechselrichters",
+        "es": "Control del inversor"
+      },
+      "description": {
+        "en": "Off by default. Once allowed, the scene actions can change the charge from the grid and the discharge time control of the battery, and start or stop an Alpha ESS EV charger. Alpha ESS documents these battery settings as changeable about once a day, and on some recent models (SMILE-G3) the schedule lives elsewhere and these settings may be ignored: check the result in the Alpha ESS app.",
+        "fr": "Désactivé par défaut. Une fois autorisé, les actions de scène peuvent modifier la charge depuis le réseau et le contrôle horaire de la décharge de la batterie, et démarrer ou arrêter une borne de recharge Alpha ESS. Alpha ESS documente ces réglages de batterie comme modifiables environ une fois par jour, et sur certains modèles récents (SMILE-G3) le planning est ailleurs et ces réglages peuvent être ignorés : vérifiez le résultat dans l’application Alpha ESS.",
+        "de": "Standardmäßig aus. Wenn erlaubt, können Szenenaktionen das Laden aus dem Netz und die Zeitsteuerung der Entladung der Batterie ändern und eine Alpha-ESS-Wallbox starten oder stoppen. Alpha ESS dokumentiert diese Batterieeinstellungen als etwa einmal pro Tag änderbar, und bei einigen neueren Modellen (SMILE-G3) liegt der Zeitplan woanders und diese Einstellungen werden eventuell ignoriert: Prüfe das Ergebnis in der Alpha-ESS-App.",
+        "es": "Desactivado por defecto. Una vez permitido, las acciones de escena pueden cambiar la carga desde la red y el control horario de descarga de la batería, e iniciar o detener un cargador Alpha ESS. Alpha ESS documenta estos ajustes de batería como modificables aproximadamente una vez al día, y en algunos modelos recientes (SMILE-G3) la programación está en otro lugar y estos ajustes pueden ignorarse: compruebe el resultado en la aplicación Alpha ESS."
+      }
+    },
+    {
+      "key": "allow_control",
+      "type": "boolean",
+      "default": false,
+      "label": {
+        "en": "Allow the scenes to control the inverter",
+        "fr": "Autoriser les scènes à piloter l’onduleur",
+        "de": "Szenen dürfen den Wechselrichter steuern",
+        "es": "Permitir que las escenas controlen el inversor"
+      },
+      "description": {
+        "en": "Writes to the battery settings and the EV charger. Read only when off.",
+        "fr": "Écritures dans les réglages de la batterie et la borne. Lecture seule si désactivé.",
+        "de": "Schreibt in die Batterieeinstellungen und die Wallbox. Aus: nur lesen.",
+        "es": "Escrituras en los ajustes de la batería y el cargador. Solo lectura si está desactivado."
+      }
+    },
+    {
+      "key": "poll_interval",
+      "type": "select",
+      "default": "60",
+      "label": {
+        "en": "Reading of the power",
+        "fr": "Lecture de la puissance",
+        "de": "Abfrage der Leistung",
+        "es": "Lectura de la potencia"
+      },
+      "description": {
+        "en": "How often the power now is read. Alpha ESS asks for 10 seconds at least between two requests: with several systems the reading is spaced out.",
+        "fr": "Fréquence de lecture de la puissance instantanée. Alpha ESS demande 10 secondes au moins entre deux requêtes : avec plusieurs systèmes, la lecture est espacée.",
+        "de": "Wie oft die aktuelle Leistung gelesen wird. Alpha ESS verlangt mindestens 10 Sekunden zwischen zwei Anfragen: Bei mehreren Systemen wird seltener gelesen.",
+        "es": "Frecuencia de lectura de la potencia instantánea. Alpha ESS pide al menos 10 segundos entre dos peticiones: con varios sistemas la lectura se espacia."
+      },
+      "options": [
+        {
+          "value": "30",
+          "label": {
+            "en": "Every 30 seconds",
+            "fr": "Toutes les 30 secondes",
+            "de": "Alle 30 Sekunden",
+            "es": "Cada 30 segundos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "Every minute",
+            "fr": "Toutes les minutes",
+            "de": "Jede Minute",
+            "es": "Cada minuto"
+          }
+        },
+        {
+          "value": "120",
+          "label": {
+            "en": "Every 2 minutes",
+            "fr": "Toutes les 2 minutes",
+            "de": "Alle 2 Minuten",
+            "es": "Cada 2 minutos"
+          }
+        },
+        {
+          "value": "300",
+          "label": {
+            "en": "Every 5 minutes",
+            "fr": "Toutes les 5 minutes",
+            "de": "Alle 5 Minuten",
+            "es": "Cada 5 minutos"
+          }
+        }
+      ]
+    },
+    {
+      "key": "language",
+      "type": "select",
+      "default": "auto",
+      "label": {
+        "en": "Language of the texts",
+        "fr": "Langue des textes",
+        "de": "Sprache der Texte",
+        "es": "Idioma de los textos"
+      },
+      "description": {
+        "en": "Feature names, scene texts and errors. Automatic: the language of the last widget shown.",
+        "fr": "Noms des fonctionnalités, textes des scènes et erreurs. Automatique : la langue du dernier widget affiché.",
+        "de": "Namen der Funktionen, Szenentexte und Fehler. Automatisch: die Sprache des zuletzt angezeigten Widgets.",
+        "es": "Nombres de las funciones, textos de escenas y errores. Automático: el idioma del último widget mostrado."
+      },
+      "options": [
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "English",
+            "de": "English",
+            "es": "English"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "Français",
+            "fr": "Français",
+            "de": "Français",
+            "es": "Français"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "Deutsch",
+            "fr": "Deutsch",
+            "de": "Deutsch",
+            "es": "Deutsch"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Español",
+            "fr": "Español",
+            "de": "Español",
+            "es": "Español"
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen",
+        "es": "Probar la conexión"
+      },
+      "description": {
+        "en": "Lists the systems bound to the AppID: serial number, model, solar and battery size.",
+        "fr": "Liste les systèmes liés à l’AppID : numéro de série, modèle, puissance solaire et taille de batterie.",
+        "de": "Listet die mit der AppID verknüpften Systeme: Seriennummer, Modell, Solarleistung und Batteriegröße.",
+        "es": "Lista los sistemas vinculados al AppID: número de serie, modelo, potencia solar y tamaño de batería."
+      }
+    },
+    {
+      "key": "request_bind_code",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Request a binding code",
+        "fr": "Demander un code de liaison",
+        "de": "Verknüpfungscode anfordern",
+        "es": "Solicitar un código de vinculación"
+      },
+      "description": {
+        "en": "Alpha ESS e-mails a verification code to the owner of the system.",
+        "fr": "Alpha ESS envoie un code de vérification par e-mail au propriétaire du système.",
+        "de": "Alpha ESS schickt dem Besitzer des Systems einen Bestätigungscode per E-Mail.",
+        "es": "Alpha ESS envía un código de verificación por correo al propietario del sistema."
+      },
+      "fields": [
+        {
+          "key": "sys_sn",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Serial number (SN)",
+            "fr": "Numéro de série (SN)",
+            "de": "Seriennummer (SN)",
+            "es": "Número de serie (SN)"
+          },
+          "placeholder": {
+            "en": "AL7011…",
+            "fr": "AL7011…",
+            "de": "AL7011…",
+            "es": "AL7011…"
+          }
+        },
+        {
+          "key": "check_code",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "CheckCode",
+            "fr": "CheckCode",
+            "de": "CheckCode",
+            "es": "CheckCode"
+          },
+          "description": {
+            "en": "On the label of the inverter, next to the serial number.",
+            "fr": "Sur l’étiquette de l’onduleur, à côté du numéro de série.",
+            "de": "Auf dem Etikett des Wechselrichters, neben der Seriennummer.",
+            "es": "En la etiqueta del inversor, junto al número de serie."
+          }
+        }
+      ]
+    },
+    {
+      "key": "bind_system",
+      "timeout_seconds": 30,
+      "label": {
+        "en": "Bind the system",
+        "fr": "Lier le système",
+        "de": "System verknüpfen",
+        "es": "Vincular el sistema"
+      },
+      "description": {
+        "en": "Binds the system to the AppID with the code received by e-mail.",
+        "fr": "Lie le système à l’AppID avec le code reçu par e-mail.",
+        "de": "Verknüpft das System mit der AppID mit dem per E-Mail erhaltenen Code.",
+        "es": "Vincula el sistema al AppID con el código recibido por correo."
+      },
+      "fields": [
+        {
+          "key": "sys_sn",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Serial number (SN)",
+            "fr": "Numéro de série (SN)",
+            "de": "Seriennummer (SN)",
+            "es": "Número de serie (SN)"
+          },
+          "placeholder": {
+            "en": "AL7011…",
+            "fr": "AL7011…",
+            "de": "AL7011…",
+            "es": "AL7011…"
+          }
+        },
+        {
+          "key": "code",
+          "type": "string",
+          "required": true,
+          "label": {
+            "en": "Code received by e-mail",
+            "fr": "Code reçu par e-mail",
+            "de": "Per E-Mail erhaltener Code",
+            "es": "Código recibido por correo"
+          }
+        }
+      ]
+    },
+    {
+      "key": "diagnostic",
+      "timeout_seconds": 10,
+      "label": {
+        "en": "Diagnostic",
+        "fr": "Diagnostic",
+        "de": "Diagnose",
+        "es": "Diagnóstico"
+      },
+      "description": {
+        "en": "Writes the state of the integration to its logs, without the secret.",
+        "fr": "Écrit l’état de l’intégration dans ses journaux, sans le secret.",
+        "de": "Schreibt den Zustand der Integration in ihre Logs, ohne das Secret.",
+        "es": "Escribe el estado de la integración en sus registros, sin el secreto."
+      }
+    }
+  ],
+  "widgets": [
+    {
+      "key": "live",
+      "icon": "zap",
+      "label": {
+        "en": "Alpha ESS now",
+        "fr": "Alpha ESS en direct",
+        "de": "Alpha ESS jetzt",
+        "es": "Alpha ESS ahora"
+      },
+      "description": {
+        "en": "Energy flow now: battery, solar, house, grid.",
+        "fr": "Flux d’énergie en direct : batterie, solaire, maison, réseau.",
+        "de": "Energiefluss jetzt: Batterie, Solar, Haus, Netz.",
+        "es": "Flujo de energía ahora: batería, solar, casa, red."
+      },
+      "settings": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        }
+      ]
+    },
+    {
+      "key": "today",
+      "icon": "sun",
+      "label": {
+        "en": "Alpha ESS today",
+        "fr": "Alpha ESS aujourd’hui",
+        "de": "Alpha ESS heute",
+        "es": "Alpha ESS hoy"
+      },
+      "description": {
+        "en": "The energies of the day and the power curve of the day.",
+        "fr": "Les énergies du jour et la courbe de puissance du jour.",
+        "de": "Die Energien des Tages und die Leistungskurve des Tages.",
+        "es": "Las energías del día y la curva de potencia del día."
+      },
+      "settings": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        }
+      ]
+    },
+    {
+      "key": "schedule",
+      "icon": "battery-charging",
+      "label": {
+        "en": "Battery schedule",
+        "fr": "Planning de la batterie",
+        "de": "Batteriezeitplan",
+        "es": "Programación batería"
+      },
+      "description": {
+        "en": "Charge from the grid and discharge settings stored on the cloud.",
+        "fr": "Réglages de charge depuis le réseau et de décharge enregistrés sur le cloud.",
+        "de": "Einstellungen für Netzladung und Entladung in der Cloud.",
+        "es": "Ajustes de carga desde la red y de descarga guardados en la nube."
+      },
+      "settings": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        }
+      ]
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "battery_full",
+      "label": {
+        "en": "Alpha ESS: battery full",
+        "fr": "Alpha ESS : batterie pleine",
+        "de": "Alpha ESS: Batterie voll",
+        "es": "Alpha ESS: batería llena"
+      },
+      "description": {
+        "en": "The battery reaches 100 %. Again once it went under 95 %.",
+        "fr": "La batterie atteint 100 %. À nouveau après être repassée sous 95 %.",
+        "de": "Die Batterie erreicht 100 %. Erneut, nachdem sie unter 95 % fiel.",
+        "es": "La batería llega al 100 %. De nuevo tras bajar del 95 %."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery level (%)",
+            "fr": "Niveau de batterie (%)",
+            "de": "Batteriestand (%)",
+            "es": "Nivel de batería (%)"
+          }
+        },
+        {
+          "key": "pv_power_w",
+          "type": "number",
+          "label": {
+            "en": "Solar power (W)",
+            "fr": "Puissance solaire (W)",
+            "de": "Solarleistung (W)",
+            "es": "Potencia solar (W)"
+          }
+        },
+        {
+          "key": "grid_power_w",
+          "type": "number",
+          "label": {
+            "en": "Grid power (W, import +)",
+            "fr": "Puissance réseau (W, import +)",
+            "de": "Netzleistung (W, Bezug +)",
+            "es": "Potencia de red (W, importación +)"
+          }
+        },
+        {
+          "key": "load_power_w",
+          "type": "number",
+          "label": {
+            "en": "House consumption (W)",
+            "fr": "Consommation de la maison (W)",
+            "de": "Hausverbrauch (W)",
+            "es": "Consumo de la casa (W)"
+          }
+        },
+        {
+          "key": "battery_power_w",
+          "type": "number",
+          "label": {
+            "en": "Battery power (W, discharge +)",
+            "fr": "Puissance batterie (W, décharge +)",
+            "de": "Batterieleistung (W, Entladung +)",
+            "es": "Potencia de batería (W, descarga +)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "battery_low",
+      "label": {
+        "en": "Alpha ESS: battery at its cut-off",
+        "fr": "Alpha ESS : batterie au seuil de coupure",
+        "de": "Alpha ESS: Batterie an der Entladegrenze",
+        "es": "Alpha ESS: batería en el corte"
+      },
+      "description": {
+        "en": "The battery reaches the cut-off SOC of the discharge (+1 point): it stops covering the house.",
+        "fr": "La batterie atteint le SOC de coupure de la décharge (+1 point) : elle ne couvre plus la maison.",
+        "de": "Die Batterie erreicht die Entladegrenze (+1 Punkt): Sie versorgt das Haus nicht mehr.",
+        "es": "La batería llega al SOC de corte de la descarga (+1 punto): deja de cubrir la casa."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery level (%)",
+            "fr": "Niveau de batterie (%)",
+            "de": "Batteriestand (%)",
+            "es": "Nivel de batería (%)"
+          }
+        },
+        {
+          "key": "pv_power_w",
+          "type": "number",
+          "label": {
+            "en": "Solar power (W)",
+            "fr": "Puissance solaire (W)",
+            "de": "Solarleistung (W)",
+            "es": "Potencia solar (W)"
+          }
+        },
+        {
+          "key": "grid_power_w",
+          "type": "number",
+          "label": {
+            "en": "Grid power (W, import +)",
+            "fr": "Puissance réseau (W, import +)",
+            "de": "Netzleistung (W, Bezug +)",
+            "es": "Potencia de red (W, importación +)"
+          }
+        },
+        {
+          "key": "load_power_w",
+          "type": "number",
+          "label": {
+            "en": "House consumption (W)",
+            "fr": "Consommation de la maison (W)",
+            "de": "Hausverbrauch (W)",
+            "es": "Consumo de la casa (W)"
+          }
+        },
+        {
+          "key": "battery_power_w",
+          "type": "number",
+          "label": {
+            "en": "Battery power (W, discharge +)",
+            "fr": "Puissance batterie (W, décharge +)",
+            "de": "Batterieleistung (W, Entladung +)",
+            "es": "Potencia de batería (W, descarga +)"
+          }
+        },
+        {
+          "key": "cutoff_soc",
+          "type": "number",
+          "label": {
+            "en": "Cut-off SOC (%)",
+            "fr": "SOC de coupure (%)",
+            "de": "Entladegrenze (%)",
+            "es": "SOC de corte (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "grid_export_started",
+      "label": {
+        "en": "Alpha ESS: export to the grid started",
+        "fr": "Alpha ESS : début d’injection sur le réseau",
+        "de": "Alpha ESS: Einspeisung beginnt",
+        "es": "Alpha ESS: empieza la exportación a la red"
+      },
+      "description": {
+        "en": "The house starts sending 200 W or more to the grid (two readings in a row).",
+        "fr": "La maison commence à envoyer 200 W ou plus sur le réseau (deux lectures de suite).",
+        "de": "Das Haus beginnt, 200 W oder mehr ins Netz einzuspeisen (zwei Abfragen hintereinander).",
+        "es": "La casa empieza a enviar 200 W o más a la red (dos lecturas seguidas)."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery level (%)",
+            "fr": "Niveau de batterie (%)",
+            "de": "Batteriestand (%)",
+            "es": "Nivel de batería (%)"
+          }
+        },
+        {
+          "key": "pv_power_w",
+          "type": "number",
+          "label": {
+            "en": "Solar power (W)",
+            "fr": "Puissance solaire (W)",
+            "de": "Solarleistung (W)",
+            "es": "Potencia solar (W)"
+          }
+        },
+        {
+          "key": "grid_power_w",
+          "type": "number",
+          "label": {
+            "en": "Grid power (W, import +)",
+            "fr": "Puissance réseau (W, import +)",
+            "de": "Netzleistung (W, Bezug +)",
+            "es": "Potencia de red (W, importación +)"
+          }
+        },
+        {
+          "key": "load_power_w",
+          "type": "number",
+          "label": {
+            "en": "House consumption (W)",
+            "fr": "Consommation de la maison (W)",
+            "de": "Hausverbrauch (W)",
+            "es": "Consumo de la casa (W)"
+          }
+        },
+        {
+          "key": "battery_power_w",
+          "type": "number",
+          "label": {
+            "en": "Battery power (W, discharge +)",
+            "fr": "Puissance batterie (W, décharge +)",
+            "de": "Batterieleistung (W, Entladung +)",
+            "es": "Potencia de batería (W, descarga +)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "grid_import_started",
+      "label": {
+        "en": "Alpha ESS: import from the grid started",
+        "fr": "Alpha ESS : début de soutirage du réseau",
+        "de": "Alpha ESS: Netzbezug beginnt",
+        "es": "Alpha ESS: empieza la importación de la red"
+      },
+      "description": {
+        "en": "The house starts drawing 200 W or more from the grid (two readings in a row).",
+        "fr": "La maison commence à tirer 200 W ou plus du réseau (deux lectures de suite).",
+        "de": "Das Haus beginnt, 200 W oder mehr aus dem Netz zu beziehen (zwei Abfragen hintereinander).",
+        "es": "La casa empieza a tomar 200 W o más de la red (dos lecturas seguidas)."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery level (%)",
+            "fr": "Niveau de batterie (%)",
+            "de": "Batteriestand (%)",
+            "es": "Nivel de batería (%)"
+          }
+        },
+        {
+          "key": "pv_power_w",
+          "type": "number",
+          "label": {
+            "en": "Solar power (W)",
+            "fr": "Puissance solaire (W)",
+            "de": "Solarleistung (W)",
+            "es": "Potencia solar (W)"
+          }
+        },
+        {
+          "key": "grid_power_w",
+          "type": "number",
+          "label": {
+            "en": "Grid power (W, import +)",
+            "fr": "Puissance réseau (W, import +)",
+            "de": "Netzleistung (W, Bezug +)",
+            "es": "Potencia de red (W, importación +)"
+          }
+        },
+        {
+          "key": "load_power_w",
+          "type": "number",
+          "label": {
+            "en": "House consumption (W)",
+            "fr": "Consommation de la maison (W)",
+            "de": "Hausverbrauch (W)",
+            "es": "Consumo de la casa (W)"
+          }
+        },
+        {
+          "key": "battery_power_w",
+          "type": "number",
+          "label": {
+            "en": "Battery power (W, discharge +)",
+            "fr": "Puissance batterie (W, décharge +)",
+            "de": "Batterieleistung (W, Entladung +)",
+            "es": "Potencia de batería (W, descarga +)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "system_offline",
+      "label": {
+        "en": "Alpha ESS: system offline",
+        "fr": "Alpha ESS : système hors ligne",
+        "de": "Alpha ESS: System offline",
+        "es": "Alpha ESS: sistema sin conexión"
+      },
+      "description": {
+        "en": "Alpha ESS says the system is offline for 10 minutes (the inverter no longer reaches the cloud).",
+        "fr": "Alpha ESS indique le système hors ligne depuis 10 minutes (l’onduleur ne joint plus le cloud).",
+        "de": "Alpha ESS meldet das System seit 10 Minuten offline (der Wechselrichter erreicht die Cloud nicht mehr).",
+        "es": "Alpha ESS indica el sistema sin conexión desde hace 10 minutos (el inversor ya no llega a la nube)."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "minutes_offline",
+          "type": "number",
+          "label": {
+            "en": "Minutes offline",
+            "fr": "Minutes hors ligne",
+            "de": "Minuten offline",
+            "es": "Minutos sin conexión"
+          }
+        }
+      ]
+    },
+    {
+      "key": "system_online",
+      "label": {
+        "en": "Alpha ESS: system back online",
+        "fr": "Alpha ESS : système de retour",
+        "de": "Alpha ESS: System wieder online",
+        "es": "Alpha ESS: sistema de nuevo en línea"
+      },
+      "description": {
+        "en": "An offline system answers again.",
+        "fr": "Un système hors ligne répond à nouveau.",
+        "de": "Ein Offline-System antwortet wieder.",
+        "es": "Un sistema sin conexión vuelve a responder."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for any system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour n’importe quel système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für jedes System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para cualquier sistema."
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "minutes_offline",
+          "type": "number",
+          "label": {
+            "en": "Minutes offline",
+            "fr": "Minutes hors ligne",
+            "de": "Minuten offline",
+            "es": "Minutos sin conexión"
+          }
+        }
+      ]
+    },
+    {
+      "key": "ev_charger_status",
+      "label": {
+        "en": "Alpha ESS: EV charger state changed",
+        "fr": "Alpha ESS : état de la borne changé",
+        "de": "Alpha ESS: Wallbox-Status geändert",
+        "es": "Alpha ESS: cambia el estado del cargador"
+      },
+      "description": {
+        "en": "An Alpha ESS EV charger is plugged in, charges, finishes, pauses or is in fault.",
+        "fr": "Une borne Alpha ESS est branchée, charge, termine, se met en pause ou passe en défaut.",
+        "de": "Eine Alpha-ESS-Wallbox wird eingesteckt, lädt, beendet, pausiert oder hat eine Störung.",
+        "es": "Un cargador Alpha ESS se conecta, carga, termina, se pausa o tiene una avería."
+      },
+      "fields": [
+        {
+          "key": "charger",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "EV charger",
+            "fr": "Borne de recharge",
+            "de": "Wallbox",
+            "es": "Cargador"
+          },
+          "description": {
+            "en": "An Alpha ESS EV charger device. Leave empty for any charger.",
+            "fr": "Un appareil borne Alpha ESS. Laissez vide pour n’importe quelle borne.",
+            "de": "Ein Alpha-ESS-Wallbox-Gerät. Leer lassen für jede Wallbox.",
+            "es": "Un dispositivo cargador Alpha ESS. Déjelo vacío para cualquier cargador."
+          }
+        },
+        {
+          "key": "status",
+          "type": "select",
+          "required": false,
+          "label": {
+            "en": "New state",
+            "fr": "Nouvel état",
+            "de": "Neuer Status",
+            "es": "Nuevo estado"
+          },
+          "description": {
+            "en": "Leave empty for any change.",
+            "fr": "Laissez vide pour tout changement.",
+            "de": "Leer lassen für jede Änderung.",
+            "es": "Déjelo vacío para cualquier cambio."
+          },
+          "options": [
+            {
+              "value": "available",
+              "label": {
+                "en": "Available (not plugged)",
+                "fr": "Disponible (non branchée)",
+                "de": "Verfügbar (nicht eingesteckt)",
+                "es": "Disponible (sin conectar)"
+              }
+            },
+            {
+              "value": "preparing",
+              "label": {
+                "en": "Plugged in, waiting",
+                "fr": "Branchée, en attente",
+                "de": "Eingesteckt, wartend",
+                "es": "Conectado, en espera"
+              }
+            },
+            {
+              "value": "charging",
+              "label": {
+                "en": "Charging",
+                "fr": "En charge",
+                "de": "Lädt",
+                "es": "Cargando"
+              }
+            },
+            {
+              "value": "suspended_evse",
+              "label": {
+                "en": "Paused by the charger",
+                "fr": "En pause (borne)",
+                "de": "Pausiert (Wallbox)",
+                "es": "En pausa (cargador)"
+              }
+            },
+            {
+              "value": "suspended_ev",
+              "label": {
+                "en": "Paused by the vehicle",
+                "fr": "En pause (véhicule)",
+                "de": "Pausiert (Fahrzeug)",
+                "es": "En pausa (vehículo)"
+              }
+            },
+            {
+              "value": "finishing",
+              "label": {
+                "en": "Charge finished",
+                "fr": "Charge terminée",
+                "de": "Ladung beendet",
+                "es": "Carga terminada"
+              }
+            },
+            {
+              "value": "faulted",
+              "label": {
+                "en": "Fault",
+                "fr": "En défaut",
+                "de": "Störung",
+                "es": "Avería"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "charger",
+          "type": "string",
+          "label": {
+            "en": "EV charger device",
+            "fr": "Appareil borne",
+            "de": "Wallbox-Gerät",
+            "es": "Dispositivo cargador"
+          }
+        },
+        {
+          "key": "charger_sn",
+          "type": "string",
+          "label": {
+            "en": "Charger serial number",
+            "fr": "Numéro de série de la borne",
+            "de": "Seriennummer der Wallbox",
+            "es": "Número de serie del cargador"
+          }
+        },
+        {
+          "key": "status",
+          "type": "string",
+          "label": {
+            "en": "New state",
+            "fr": "Nouvel état",
+            "de": "Neuer Status",
+            "es": "Nuevo estado"
+          }
+        },
+        {
+          "key": "previous_status",
+          "type": "string",
+          "label": {
+            "en": "Previous state",
+            "fr": "État précédent",
+            "de": "Vorheriger Status",
+            "es": "Estado anterior"
+          }
+        },
+        {
+          "key": "system",
+          "type": "string",
+          "label": {
+            "en": "Device",
+            "fr": "Appareil",
+            "de": "Gerät",
+            "es": "Dispositivo"
+          }
+        },
+        {
+          "key": "system_name",
+          "type": "string",
+          "label": {
+            "en": "Device name",
+            "fr": "Nom de l’appareil",
+            "de": "Gerätename",
+            "es": "Nombre del dispositivo"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        }
+      ]
+    },
+    {
+      "key": "access_refused",
+      "label": {
+        "en": "Alpha ESS: access refused",
+        "fr": "Alpha ESS : accès refusé",
+        "de": "Alpha ESS: Zugriff verweigert",
+        "es": "Alpha ESS: acceso denegado"
+      },
+      "description": {
+        "en": "Alpha ESS refuses the AppID (signature, IP allow-list, clock) or a system is not bound to it.",
+        "fr": "Alpha ESS refuse l’AppID (signature, liste blanche d’IP, horloge) ou un système n’y est pas lié.",
+        "de": "Alpha ESS lehnt die AppID ab (Signatur, IP-Whitelist, Uhrzeit) oder ein System ist nicht verknüpft.",
+        "es": "Alpha ESS rechaza el AppID (firma, lista blanca de IP, reloj) o un sistema no está vinculado."
+      },
+      "fields": [
+        {
+          "key": "reason",
+          "type": "select",
+          "required": false,
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          },
+          "description": {
+            "en": "Leave empty for any reason.",
+            "fr": "Laissez vide pour toute raison.",
+            "de": "Leer lassen für jeden Grund.",
+            "es": "Déjelo vacío para cualquier motivo."
+          },
+          "options": [
+            {
+              "value": "auth",
+              "label": {
+                "en": "AppID or AppSecret refused",
+                "fr": "AppID ou AppSecret refusé",
+                "de": "AppID oder AppSecret abgelehnt",
+                "es": "AppID o AppSecret rechazado"
+              }
+            },
+            {
+              "value": "clock",
+              "label": {
+                "en": "Clock of the host off",
+                "fr": "Horloge de la machine décalée",
+                "de": "Uhr des Rechners falsch",
+                "es": "Reloj del equipo desfasado"
+              }
+            },
+            {
+              "value": "whitelist",
+              "label": {
+                "en": "IP not allowed",
+                "fr": "IP non autorisée",
+                "de": "IP nicht erlaubt",
+                "es": "IP no permitida"
+              }
+            },
+            {
+              "value": "not_bound",
+              "label": {
+                "en": "System not bound",
+                "fr": "Système non lié",
+                "de": "System nicht verknüpft",
+                "es": "Sistema no vinculado"
+              }
+            }
+          ]
+        }
+      ],
+      "variables": [
+        {
+          "key": "reason",
+          "type": "string",
+          "label": {
+            "en": "Reason",
+            "fr": "Raison",
+            "de": "Grund",
+            "es": "Motivo"
+          }
+        },
+        {
+          "key": "code",
+          "type": "number",
+          "label": {
+            "en": "Alpha ESS code",
+            "fr": "Code Alpha ESS",
+            "de": "Alpha-ESS-Code",
+            "es": "Código Alpha ESS"
+          }
+        },
+        {
+          "key": "sn",
+          "type": "string",
+          "label": {
+            "en": "Serial number",
+            "fr": "Numéro de série",
+            "de": "Seriennummer",
+            "es": "Número de serie"
+          }
+        },
+        {
+          "key": "message",
+          "type": "string",
+          "label": {
+            "en": "Message",
+            "fr": "Message",
+            "de": "Meldung",
+            "es": "Mensaje"
+          }
+        }
+      ]
+    }
+  ],
+  "scene_actions": [
+    {
+      "key": "set_grid_charge",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Alpha ESS: charge from the grid",
+        "fr": "Alpha ESS : charge depuis le réseau",
+        "de": "Alpha ESS: Laden aus dem Netz",
+        "es": "Alpha ESS: carga desde la red"
+      },
+      "description": {
+        "en": "Turns the charge of the battery from the grid on or off, its two periods and the SOC it stops at. Needs control allowed in the configuration.",
+        "fr": "Active ou désactive la charge de la batterie depuis le réseau, ses deux plages et le SOC où elle s’arrête. Pilotage à autoriser dans la configuration.",
+        "de": "Schaltet das Laden der Batterie aus dem Netz an oder aus, seine zwei Zeiträume und den SOC, bei dem es stoppt. Steuerung in der Konfiguration erlauben.",
+        "es": "Activa o desactiva la carga de la batería desde la red, sus dos franjas y el SOC en el que se detiene. Requiere permitir el control en la configuración."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        },
+        {
+          "key": "enabled",
+          "type": "select",
+          "default": "keep",
+          "required": false,
+          "label": {
+            "en": "Charge from the grid",
+            "fr": "Charge depuis le réseau",
+            "de": "Laden aus dem Netz",
+            "es": "Carga desde la red"
+          },
+          "options": [
+            {
+              "value": "keep",
+              "label": {
+                "en": "Keep as it is",
+                "fr": "Ne pas changer",
+                "de": "Unverändert lassen",
+                "es": "Dejar como está"
+              }
+            },
+            {
+              "value": "on",
+              "label": {
+                "en": "On",
+                "fr": "Activé",
+                "de": "An",
+                "es": "Activado"
+              }
+            },
+            {
+              "value": "off",
+              "label": {
+                "en": "Off",
+                "fr": "Désactivé",
+                "de": "Aus",
+                "es": "Desactivado"
+              }
+            }
+          ]
+        },
+        {
+          "key": "period_1",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Period 1",
+            "fr": "Plage 1",
+            "de": "Zeitraum 1",
+            "es": "Franja 1"
+          },
+          "description": {
+            "en": "Like 01:00-05:00, on quarter hours (00:00 to 23:45). \"off\" turns it off. Empty: kept as it is.",
+            "fr": "Comme 01:00-05:00, au quart d’heure (00:00 à 23:45). « off » la désactive. Vide : inchangée.",
+            "de": "Wie 01:00-05:00, in Viertelstunden (00:00 bis 23:45). „off“ schaltet ihn aus. Leer: unverändert.",
+            "es": "Como 01:00-05:00, en cuartos de hora (00:00 a 23:45). «off» la desactiva. Vacío: sin cambios."
+          },
+          "placeholder": {
+            "en": "01:00-05:00",
+            "fr": "01:00-05:00",
+            "de": "01:00-05:00",
+            "es": "01:00-05:00"
+          }
+        },
+        {
+          "key": "period_2",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Period 2",
+            "fr": "Plage 2",
+            "de": "Zeitraum 2",
+            "es": "Franja 2"
+          },
+          "description": {
+            "en": "Like 01:00-05:00, on quarter hours (00:00 to 23:45). \"off\" turns it off. Empty: kept as it is.",
+            "fr": "Comme 01:00-05:00, au quart d’heure (00:00 à 23:45). « off » la désactive. Vide : inchangée.",
+            "de": "Wie 01:00-05:00, in Viertelstunden (00:00 bis 23:45). „off“ schaltet ihn aus. Leer: unverändert.",
+            "es": "Como 01:00-05:00, en cuartos de hora (00:00 a 23:45). «off» la desactiva. Vacío: sin cambios."
+          },
+          "placeholder": {
+            "en": "01:00-05:00",
+            "fr": "01:00-05:00",
+            "de": "01:00-05:00",
+            "es": "01:00-05:00"
+          }
+        },
+        {
+          "key": "max_soc",
+          "type": "number",
+          "min": 10,
+          "max": 100,
+          "required": false,
+          "label": {
+            "en": "Charge up to (%)",
+            "fr": "Charger jusqu’à (%)",
+            "de": "Laden bis (%)",
+            "es": "Cargar hasta (%)"
+          },
+          "description": {
+            "en": "10 to 100. Empty: kept as it is.",
+            "fr": "10 à 100. Vide : inchangé.",
+            "de": "10 bis 100. Leer: unverändert.",
+            "es": "10 a 100. Vacío: sin cambios."
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "label": {
+            "en": "Result",
+            "fr": "Résultat",
+            "de": "Ergebnis",
+            "es": "Resultado"
+          }
+        },
+        {
+          "key": "enabled",
+          "type": "boolean",
+          "label": {
+            "en": "Enabled",
+            "fr": "Activé",
+            "de": "Aktiviert",
+            "es": "Activado"
+          }
+        },
+        {
+          "key": "period_1",
+          "type": "string",
+          "label": {
+            "en": "Period 1",
+            "fr": "Plage 1",
+            "de": "Zeitraum 1",
+            "es": "Franja 1"
+          }
+        },
+        {
+          "key": "period_2",
+          "type": "string",
+          "label": {
+            "en": "Period 2",
+            "fr": "Plage 2",
+            "de": "Zeitraum 2",
+            "es": "Franja 2"
+          }
+        },
+        {
+          "key": "max_soc",
+          "type": "number",
+          "label": {
+            "en": "Charge up to (%)",
+            "fr": "Charger jusqu’à (%)",
+            "de": "Laden bis (%)",
+            "es": "Cargar hasta (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "set_discharge",
+      "timeout_seconds": 60,
+      "label": {
+        "en": "Alpha ESS: discharge time control",
+        "fr": "Alpha ESS : contrôle horaire de la décharge",
+        "de": "Alpha ESS: Zeitsteuerung der Entladung",
+        "es": "Alpha ESS: control horario de descarga"
+      },
+      "description": {
+        "en": "Turns the discharge time control of the battery on or off, its two periods and its cut-off SOC. Needs control allowed in the configuration.",
+        "fr": "Active ou désactive le contrôle horaire de la décharge, ses deux plages et son SOC de coupure. Pilotage à autoriser dans la configuration.",
+        "de": "Schaltet die Zeitsteuerung der Entladung an oder aus, ihre zwei Zeiträume und ihre Entladegrenze. Steuerung in der Konfiguration erlauben.",
+        "es": "Activa o desactiva el control horario de descarga, sus dos franjas y su SOC de corte. Requiere permitir el control en la configuración."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        },
+        {
+          "key": "enabled",
+          "type": "select",
+          "default": "keep",
+          "required": false,
+          "label": {
+            "en": "Discharge time control",
+            "fr": "Contrôle horaire de la décharge",
+            "de": "Zeitsteuerung der Entladung",
+            "es": "Control horario de descarga"
+          },
+          "options": [
+            {
+              "value": "keep",
+              "label": {
+                "en": "Keep as it is",
+                "fr": "Ne pas changer",
+                "de": "Unverändert lassen",
+                "es": "Dejar como está"
+              }
+            },
+            {
+              "value": "on",
+              "label": {
+                "en": "On",
+                "fr": "Activé",
+                "de": "An",
+                "es": "Activado"
+              }
+            },
+            {
+              "value": "off",
+              "label": {
+                "en": "Off",
+                "fr": "Désactivé",
+                "de": "Aus",
+                "es": "Desactivado"
+              }
+            }
+          ]
+        },
+        {
+          "key": "period_1",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Period 1",
+            "fr": "Plage 1",
+            "de": "Zeitraum 1",
+            "es": "Franja 1"
+          },
+          "description": {
+            "en": "Like 01:00-05:00, on quarter hours (00:00 to 23:45). \"off\" turns it off. Empty: kept as it is.",
+            "fr": "Comme 01:00-05:00, au quart d’heure (00:00 à 23:45). « off » la désactive. Vide : inchangée.",
+            "de": "Wie 01:00-05:00, in Viertelstunden (00:00 bis 23:45). „off“ schaltet ihn aus. Leer: unverändert.",
+            "es": "Como 01:00-05:00, en cuartos de hora (00:00 a 23:45). «off» la desactiva. Vacío: sin cambios."
+          },
+          "placeholder": {
+            "en": "01:00-05:00",
+            "fr": "01:00-05:00",
+            "de": "01:00-05:00",
+            "es": "01:00-05:00"
+          }
+        },
+        {
+          "key": "period_2",
+          "type": "string",
+          "required": false,
+          "label": {
+            "en": "Period 2",
+            "fr": "Plage 2",
+            "de": "Zeitraum 2",
+            "es": "Franja 2"
+          },
+          "description": {
+            "en": "Like 01:00-05:00, on quarter hours (00:00 to 23:45). \"off\" turns it off. Empty: kept as it is.",
+            "fr": "Comme 01:00-05:00, au quart d’heure (00:00 à 23:45). « off » la désactive. Vide : inchangée.",
+            "de": "Wie 01:00-05:00, in Viertelstunden (00:00 bis 23:45). „off“ schaltet ihn aus. Leer: unverändert.",
+            "es": "Como 01:00-05:00, en cuartos de hora (00:00 a 23:45). «off» la desactiva. Vacío: sin cambios."
+          },
+          "placeholder": {
+            "en": "01:00-05:00",
+            "fr": "01:00-05:00",
+            "de": "01:00-05:00",
+            "es": "01:00-05:00"
+          }
+        },
+        {
+          "key": "cutoff_soc",
+          "type": "number",
+          "min": 10,
+          "max": 100,
+          "required": false,
+          "label": {
+            "en": "Cut-off SOC (%)",
+            "fr": "SOC de coupure (%)",
+            "de": "Entladegrenze (%)",
+            "es": "SOC de corte (%)"
+          },
+          "description": {
+            "en": "The battery stops discharging at this level. 10 to 100. Empty: kept as it is.",
+            "fr": "La batterie arrête de se décharger à ce niveau. 10 à 100. Vide : inchangé.",
+            "de": "Bei diesem Stand hört die Batterie auf zu entladen. 10 bis 100. Leer: unverändert.",
+            "es": "La batería deja de descargarse en este nivel. 10 a 100. Vacío: sin cambios."
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "label": {
+            "en": "Result",
+            "fr": "Résultat",
+            "de": "Ergebnis",
+            "es": "Resultado"
+          }
+        },
+        {
+          "key": "enabled",
+          "type": "boolean",
+          "label": {
+            "en": "Enabled",
+            "fr": "Activé",
+            "de": "Aktiviert",
+            "es": "Activado"
+          }
+        },
+        {
+          "key": "period_1",
+          "type": "string",
+          "label": {
+            "en": "Period 1",
+            "fr": "Plage 1",
+            "de": "Zeitraum 1",
+            "es": "Franja 1"
+          }
+        },
+        {
+          "key": "period_2",
+          "type": "string",
+          "label": {
+            "en": "Period 2",
+            "fr": "Plage 2",
+            "de": "Zeitraum 2",
+            "es": "Franja 2"
+          }
+        },
+        {
+          "key": "cutoff_soc",
+          "type": "number",
+          "label": {
+            "en": "Cut-off SOC (%)",
+            "fr": "SOC de coupure (%)",
+            "de": "Entladegrenze (%)",
+            "es": "SOC de corte (%)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "ev_charger_control",
+      "timeout_seconds": 45,
+      "label": {
+        "en": "Alpha ESS: start or stop the EV charger",
+        "fr": "Alpha ESS : démarrer ou arrêter la borne",
+        "de": "Alpha ESS: Wallbox starten oder stoppen",
+        "es": "Alpha ESS: iniciar o detener el cargador"
+      },
+      "description": {
+        "en": "Starts or stops the charge of an Alpha ESS EV charger. Needs control allowed in the configuration.",
+        "fr": "Démarre ou arrête la charge d’une borne Alpha ESS. Pilotage à autoriser dans la configuration.",
+        "de": "Startet oder stoppt die Ladung einer Alpha-ESS-Wallbox. Steuerung in der Konfiguration erlauben.",
+        "es": "Inicia o detiene la carga de un cargador Alpha ESS. Requiere permitir el control en la configuración."
+      },
+      "fields": [
+        {
+          "key": "charger",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "EV charger",
+            "fr": "Borne de recharge",
+            "de": "Wallbox",
+            "es": "Cargador"
+          },
+          "description": {
+            "en": "An Alpha ESS EV charger device. Leave empty for the first charger.",
+            "fr": "Un appareil borne Alpha ESS. Laissez vide pour la première borne.",
+            "de": "Ein Alpha-ESS-Wallbox-Gerät. Leer lassen für die erste Wallbox.",
+            "es": "Un dispositivo cargador Alpha ESS. Déjelo vacío para el primer cargador."
+          }
+        },
+        {
+          "key": "command",
+          "type": "select",
+          "required": true,
+          "default": "start",
+          "label": {
+            "en": "Command",
+            "fr": "Commande",
+            "de": "Befehl",
+            "es": "Orden"
+          },
+          "options": [
+            {
+              "value": "start",
+              "label": {
+                "en": "Start charging",
+                "fr": "Démarrer la charge",
+                "de": "Laden starten",
+                "es": "Iniciar la carga"
+              }
+            },
+            {
+              "value": "stop",
+              "label": {
+                "en": "Stop charging",
+                "fr": "Arrêter la charge",
+                "de": "Laden stoppen",
+                "es": "Detener la carga"
+              }
+            }
+          ]
+        }
+      ],
+      "outputs": [
+        {
+          "key": "result",
+          "type": "string",
+          "label": {
+            "en": "Result",
+            "fr": "Résultat",
+            "de": "Ergebnis",
+            "es": "Resultado"
+          }
+        }
+      ]
+    },
+    {
+      "key": "get_today",
+      "timeout_seconds": 10,
+      "label": {
+        "en": "Alpha ESS: energies of today",
+        "fr": "Alpha ESS : énergies du jour",
+        "de": "Alpha ESS: Energien von heute",
+        "es": "Alpha ESS: energías de hoy"
+      },
+      "description": {
+        "en": "The energies of today as last read (no request): for a message or a condition.",
+        "fr": "Les énergies du jour telles que lues (sans requête) : pour un message ou une condition.",
+        "de": "Die Energien von heute wie zuletzt gelesen (ohne Anfrage): für eine Nachricht oder Bedingung.",
+        "es": "Las energías de hoy tal como se leyeron (sin petición): para un mensaje o una condición."
+      },
+      "fields": [
+        {
+          "key": "system",
+          "type": "select",
+          "source": "devices",
+          "required": false,
+          "label": {
+            "en": "System",
+            "fr": "Système",
+            "de": "System",
+            "es": "Sistema"
+          },
+          "description": {
+            "en": "An Alpha ESS device. Leave empty for the first system.",
+            "fr": "Un appareil Alpha ESS. Laissez vide pour le premier système.",
+            "de": "Ein Alpha-ESS-Gerät. Leer lassen für das erste System.",
+            "es": "Un dispositivo Alpha ESS. Déjelo vacío para el primer sistema."
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "key": "pv_kwh",
+          "type": "number",
+          "label": {
+            "en": "Solar production (kWh)",
+            "fr": "Production solaire (kWh)",
+            "de": "Solarerzeugung (kWh)",
+            "es": "Producción solar (kWh)"
+          }
+        },
+        {
+          "key": "load_kwh",
+          "type": "number",
+          "label": {
+            "en": "House consumption (kWh)",
+            "fr": "Consommation de la maison (kWh)",
+            "de": "Hausverbrauch (kWh)",
+            "es": "Consumo de la casa (kWh)"
+          }
+        },
+        {
+          "key": "import_kwh",
+          "type": "number",
+          "label": {
+            "en": "Grid import (kWh)",
+            "fr": "Import réseau (kWh)",
+            "de": "Netzbezug (kWh)",
+            "es": "Importación de la red (kWh)"
+          }
+        },
+        {
+          "key": "export_kwh",
+          "type": "number",
+          "label": {
+            "en": "Grid export (kWh)",
+            "fr": "Export réseau (kWh)",
+            "de": "Einspeisung (kWh)",
+            "es": "Exportación a la red (kWh)"
+          }
+        },
+        {
+          "key": "charge_kwh",
+          "type": "number",
+          "label": {
+            "en": "Battery charged (kWh)",
+            "fr": "Batterie chargée (kWh)",
+            "de": "Batterie geladen (kWh)",
+            "es": "Batería cargada (kWh)"
+          }
+        },
+        {
+          "key": "discharge_kwh",
+          "type": "number",
+          "label": {
+            "en": "Battery discharged (kWh)",
+            "fr": "Batterie déchargée (kWh)",
+            "de": "Batterie entladen (kWh)",
+            "es": "Batería descargada (kWh)"
+          }
+        },
+        {
+          "key": "self_sufficiency",
+          "type": "number",
+          "label": {
+            "en": "Self-sufficiency (%)",
+            "fr": "Autonomie (%)",
+            "de": "Autarkie (%)",
+            "es": "Autosuficiencia (%)"
+          }
+        },
+        {
+          "key": "battery_level",
+          "type": "number",
+          "label": {
+            "en": "Battery level (%)",
+            "fr": "Niveau de batterie (%)",
+            "de": "Batteriestand (%)",
+            "es": "Nivel de batería (%)"
+          }
+        },
+        {
+          "key": "summary",
+          "type": "string",
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          }
+        }
+      ]
+    }
+  ]
+}

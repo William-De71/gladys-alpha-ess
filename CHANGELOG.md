@@ -5,7 +5,7 @@ follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
 follow [Semantic Versioning](https://semver.org/). This file is generated at
 each release from the Conventional Commits: do not edit it by hand.
 
-## [0.1.0] - unreleased
+## [0.1.0] - 2026-10-23
 
 ### Added
 
@@ -15,3 +15,5 @@ each release from the Conventional Commits: do not edit it by hand.
 - **widgets:** the energy flow now (battery, solar, house, grid), today (energies, self-sufficiency, power curve of the day) and the battery schedule stored on the cloud
 - **configuration:** AppID and AppSecret with a guide, binding a system to the AppID from Gladys (code e-mailed to the owner, then the code), the reading interval of the power, "Test the connection" and "Diagnostic" buttons
 - **i18n:** English, French, German and Spanish for the manifest, the runtime texts, the documentation and the README
+
+[0.1.0]: https://github.com/William-De71/gladys-alpha-ess/releases/tag/v0.1.0

@@ -1,6 +1,6 @@
 {
   "name": "gladys-alpha-ess",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "External Gladys Assistant integration for Alpha ESS hybrid inverters and batteries (official Open API): one device per system and per EV charger, energy indexes, scene triggers and actions, dashboard widgets.",
   "homepage": "https://github.com/William-De71/gladys-alpha-ess",

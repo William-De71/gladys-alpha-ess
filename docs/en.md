@@ -14,7 +14,7 @@ Transport: cloud. Your AppID, the serial numbers of your systems and the setting
 
 ## Prerequisites
 
-- Gladys Assistant 5.1.0 or later.
+- Gladys Assistant 5.3.0 or later.
 - An Alpha ESS system that sends its data to the Alpha ESS cloud (it shows in the Alpha ESS app).
 - **A developer account** (free) on [open.alphaess.com](https://open.alphaess.com). Under **Development Management → Developer Information**, copy the **Developer ID (AppID)** and the **Developer Secret (AppSecret)**.
 - **Your system bound to the AppID**: on the portal, add the system with its **serial number (SN)** and its **CheckCode**, both on the label of the inverter (or given by your installer). If the portal never sends the confirmation e-mail, use the binding buttons of the configuration (see below).

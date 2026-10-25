@@ -14,7 +14,7 @@ Transporte: nube. Su AppID, los números de serie de sus sistemas y los ajustes 
 
 ## Requisitos previos
 
-- Gladys Assistant 5.1.0 o posterior.
+- Gladys Assistant 5.3.0 o posterior.
 - Un sistema Alpha ESS que envía sus datos a la nube de Alpha ESS (aparece en la aplicación Alpha ESS).
 - **Una cuenta de desarrollador** (gratuita) en [open.alphaess.com](https://open.alphaess.com). En **Development Management → Developer Information**, copie el **Developer ID (AppID)** y el **Developer Secret (AppSecret)**.
 - **Su sistema vinculado al AppID**: en el portal, añada el sistema con su **número de serie (SN)** y su **CheckCode**, ambos en la etiqueta del inversor (o facilitados por su instalador). Si el portal nunca envía el correo de confirmación, use los botones de vinculación de la configuración (ver más abajo).

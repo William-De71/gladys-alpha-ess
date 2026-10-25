@@ -61,8 +61,8 @@ test('declares the cloud transport: openapi.alphaess.com only, never a local dev
   assert.doesNotMatch(source('../src/app.js'), /publishTransports|GLADYS_PREFER_LOCAL/);
 });
 
-test('widgets and scenes need Gladys 5.1.0, nothing more; no permission', () => {
-  assert.equal(manifest.gladys_version, '>=5.1.0');
+test('requires Gladys 5.3.0 (catalog keywords; widgets and scenes since 5.1.0); no permission', () => {
+  assert.equal(manifest.gladys_version, '>=5.3.0');
   assert.deepEqual(manifest.categories, ['energy']);
   const text = JSON.stringify(manifest);
   assert.doesNotMatch(text, /"source":"houses"/, 'houses need 5.2.0');
@@ -73,8 +73,6 @@ test('widgets and scenes need Gladys 5.1.0, nothing more; no permission', () => 
     'network_discovery',
     'webhooks',
     'messaging',
-    'keywords',
-    'countries',
     'energy_contracts',
   ]) {
     assert.equal(manifest[key], undefined, `${key} (permission, or a newer Gladys)`);
@@ -217,4 +215,16 @@ test('offers the languages of the code, automatic by default', () => {
   const field = byKey(manifest.config_schema).get('language');
   assert.deepEqual(values(field), [AUTO_LANGUAGE, ...LANGUAGES]);
   assert.equal(field.default, AUTO_LANGUAGE);
+});
+
+test('catalog of Gladys 5.3.0: search keywords within the store bounds, countries', () => {
+  const { keywords } = manifest;
+  assert.ok(Array.isArray(keywords) && keywords.length >= 1 && keywords.length <= 10);
+  const normalized = keywords.map((keyword) => keyword.trim().toLowerCase());
+  for (const keyword of normalized) {
+    assert.ok(keyword.length >= 2 && keyword.length <= 30, keyword);
+  }
+  assert.equal(new Set(normalized).size, normalized.length, 'unique once trimmed and lowercased');
+  assert.ok(!normalized.includes(manifest.name.toLowerCase()), 'never the name itself');
+  assert.equal(manifest.countries, undefined, 'usable worldwide: no country list');
 });

@@ -14,7 +14,7 @@ Transport: Cloud. Deine AppID, die Seriennummern deiner Systeme und die Einstell
 
 ## Voraussetzungen
 
-- Gladys Assistant 5.1.0 oder neuer.
+- Gladys Assistant 5.3.0 oder neuer.
 - Ein Alpha-ESS-System, das seine Daten an die Alpha-ESS-Cloud sendet (es erscheint in der Alpha-ESS-App).
 - **Ein Entwicklerkonto** (kostenlos) auf [open.alphaess.com](https://open.alphaess.com). Unter **Development Management → Developer Information** kopierst du die **Developer ID (AppID)** und das **Developer Secret (AppSecret)**.
 - **Dein System mit der AppID verknüpft**: Füge das System im Portal mit seiner **Seriennummer (SN)** und seinem **CheckCode** hinzu, beide auf dem Etikett des Wechselrichters (oder von deinem Installateur). Wenn das Portal nie die Bestätigungs-E-Mail schickt, nutze die Verknüpfungs-Schaltflächen der Konfiguration (siehe unten).
